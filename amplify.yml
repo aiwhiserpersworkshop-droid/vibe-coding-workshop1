@@ -1,0 +1,23 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - corepack enable
+        - corepack prepare pnpm@latest --activate
+        - pnpm install
+    build:
+      commands:
+        - npx prisma generate
+        - env | grep -e TEST_RUN_QUEUE_URL >> .env.production
+        - env | grep -e TEXT_ANALYSIS_QUEUE_URL >> .env.production
+        - env | grep -e NLP_ANALYSIS_QUEUE_URL >> .env.production
+        - env | grep -e AWS_REGION >> .env.production || echo "AWS_REGION=us-west-2" >> .env.production
+        - pnpm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
