@@ -14,6 +14,12 @@ const navigation = [
       { name: 'Create Example', href: '/examples/new' },
     ],
   },
+  {
+    name: 'CONVERSATIONS',
+    items: [
+      { name: 'Explore Conversations', href: '/conversations' },
+    ],
+  },
 ];
 
 export function GlobalNav() {
@@ -94,7 +100,8 @@ export function GlobalNav() {
                 <div className="flex flex-col gap-1">
                   {section.items.map((item) => {
                     const isActive = pathname === item.href || 
-                      (item.href === '/examples' && pathname.startsWith('/examples/') && pathname !== '/examples/new');
+                      (item.href === '/examples' && pathname.startsWith('/examples/') && pathname !== '/examples/new') ||
+                      (item.href === '/conversations' && pathname.startsWith('/conversations/'));
                     
                     return (
                       <Link

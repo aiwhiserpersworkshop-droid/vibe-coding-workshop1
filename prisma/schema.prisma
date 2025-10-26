@@ -17,3 +17,40 @@ model Example {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Contact {
+  id         String    @id @default(uuid())
+  externalId String    @unique
+  data       Json?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  messages   Message[]
+
+  @@index([externalId])
+}
+
+model Conversation {
+  id         String    @id @default(uuid())
+  externalId String    @unique
+  data       Json?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  messages   Message[]
+
+  @@index([externalId])
+}
+
+model Message {
+  id                     String       @id @default(uuid())
+  conversationExternalId String
+  contactExternalId      String
+  text                   String       @db.Text
+  data                   Json?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+  conversation           Conversation @relation(fields: [conversationExternalId], references: [externalId])
+  contact                Contact      @relation(fields: [contactExternalId], references: [externalId])
+
+  @@index([conversationExternalId])
+  @@index([contactExternalId])
+}
