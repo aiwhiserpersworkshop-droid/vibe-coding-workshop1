@@ -3,7 +3,7 @@ import { prisma } from '#/lib/prisma';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { externalId: string } }
+  { params }: { params: Promise<{ externalId: string }> }
 ) {
   try {
     const apiKey = request.headers.get('x-api-key');
@@ -15,7 +15,7 @@ export async function GET(
       );
     }
 
-    const { externalId } = params;
+    const { externalId } = await params;
 
     const conversation = await prisma.conversation.findUnique({
       where: { externalId },

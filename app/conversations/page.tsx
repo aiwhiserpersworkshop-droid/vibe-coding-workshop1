@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -24,7 +24,7 @@ type ConversationsResponse = {
   };
 };
 
-export default function ConversationsPage() {
+function ConversationsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -338,5 +338,17 @@ export default function ConversationsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ConversationsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-600 border-t-white"></div>
+      </div>
+    }>
+      <ConversationsContent />
+    </Suspense>
   );
 }
